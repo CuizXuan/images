@@ -1,23 +1,14 @@
-version: '2'
+# 选择基础镜像
+FROM python:3.9
 
-networks:
-  monitor:
-    driver: bridge
+# 设置工作目录
+WORKDIR /app
 
-services:
-  prometheus:
-    image: prom/prometheus
-    container_name: prometheus
-    hostname: prometheus
-    restart: always
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-      # - ./node_down.yml:/usr/local/etc/node_down.yml:rw
-    ports:
-      - "9090:9090"
-    networks:
-      - monitor
+# 复制当前目录下的文件到容器内
+COPY . /app
 
+# 安装依赖
+RUN pip install -r requirements.txt
 
- 
-
+# 启动命令
+CMD ["python", "app.py"]
